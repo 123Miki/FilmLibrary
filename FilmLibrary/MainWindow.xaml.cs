@@ -11,10 +11,7 @@ namespace FilmLibrary
     {
         public MainWindow()
         {
-            InitializeComponent();
-
-            IDirectorService directorService = new DirectorService();
-
+            InitializeComponent();            
             GoToAccueil();
         }
 

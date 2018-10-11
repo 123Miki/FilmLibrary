@@ -65,9 +65,9 @@ namespace FilmLibrary.Service
                 Save();
                 saved = true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                Logger.LogMessage(e.Message);
             }
             return saved;
         }
@@ -87,9 +87,9 @@ namespace FilmLibrary.Service
                 Save();
                 updated = true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                Logger.LogMessage(e.Message);
             }
             return updated;
         }
@@ -114,21 +114,28 @@ namespace FilmLibrary.Service
         /// </summary>
         private void Load()
         {
-            if (!File.Exists(DataFilePosition.Film))
+            try
             {
-                var file = File.Create(DataFilePosition.Film);
-                file.Close();
+                if (!File.Exists(DataFilePosition.Film))
+                {
+                    var file = File.Create(DataFilePosition.Film);
+                    file.Close();
+                }
+
+                string json = File.ReadAllText(DataFilePosition.Film);
+                var filmsFromJson = JsonConvert.DeserializeObject<List<Film>>(json);
+
+                foreach (Film film in filmsFromJson)
+                {
+                    film.Director = directorService.GetDirector(film.DirectorId);
+                }
+
+                _films = new List<Film>(filmsFromJson);
             }
-
-            string json = File.ReadAllText(DataFilePosition.Film);
-            var filmsFromJson = JsonConvert.DeserializeObject<List<Film>>(json);
-
-            foreach (Film film in filmsFromJson)
+            catch (Exception e)
             {
-                film.Director = directorService.GetDirector(film.DirectorId);
+                Logger.LogMessage(e.Message);
             }
-
-            _films = new List<Film>(filmsFromJson);
         }
 
         /// <summary>
@@ -137,9 +144,16 @@ namespace FilmLibrary.Service
         /// </summary>
         private void Save()
         {
-            string json = JsonConvert.SerializeObject(_films, Formatting.Indented);
-            File.WriteAllText(DataFilePosition.Film, json);
-        }
+            try
+            {
+                string json = JsonConvert.SerializeObject(_films, Formatting.Indented);
+                File.WriteAllText(DataFilePosition.Film, json);
+            }
+            catch (Exception e)
+            {
+                Logger.LogMessage(e.Message);
+            }
+}
 
         #endregion
     }

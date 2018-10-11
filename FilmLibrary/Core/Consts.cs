@@ -4,5 +4,6 @@
     {
         public const string Director = "Director.json";
         public const string Film = "Film.json";
+        public const string Log = "Logs.txt";
     }
 }

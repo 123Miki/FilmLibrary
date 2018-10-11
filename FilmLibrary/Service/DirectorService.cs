@@ -67,9 +67,9 @@ namespace FilmLibrary.Service
                 Save();
                 saved = true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                Logger.LogMessage(e.Message);
             }
             return saved;
         }
@@ -89,9 +89,9 @@ namespace FilmLibrary.Service
                 Save();
                 updated = true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                Logger.LogMessage(e.Message);
             }
             return updated;
         }
@@ -115,14 +115,21 @@ namespace FilmLibrary.Service
         /// </summary>
         private void Load()
         {
-            if (!File.Exists(DataFilePosition.Director))
+            try
             {
-                var file = File.Create(DataFilePosition.Director);
-                file.Close();
-            }
+                if (!File.Exists(DataFilePosition.Director))
+                {
+                    var file = File.Create(DataFilePosition.Director);
+                    file.Close();
+                }
 
-            string json = File.ReadAllText(DataFilePosition.Director);
-            _directors = JsonConvert.DeserializeObject<List<Director>>(json);
+                string json = File.ReadAllText(DataFilePosition.Director);
+                _directors = JsonConvert.DeserializeObject<List<Director>>(json);
+            }
+            catch (Exception e)
+            {
+                Logger.LogMessage(e.Message);
+            }
         }
 
         /// <summary>
@@ -131,8 +138,15 @@ namespace FilmLibrary.Service
         /// </summary>
         private void Save()
         {
-            string json = JsonConvert.SerializeObject(_directors, Formatting.Indented);
-            File.WriteAllText(DataFilePosition.Director, json);
+            try
+            {
+                string json = JsonConvert.SerializeObject(_directors, Formatting.Indented);
+                File.WriteAllText(DataFilePosition.Director, json);
+            }
+            catch (Exception e)
+            {
+                Logger.LogMessage(e.Message);
+            }
         }
 
         #endregion

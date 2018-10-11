@@ -64,7 +64,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Business\Director.cs" />
-    <Compile Include="Business\FilmDto.cs" />
+    <Compile Include="Business\Film.cs" />
     <Compile Include="Core\Consts.cs" />
     <Compile Include="Service\DirectorService.cs" />
     <Compile Include="Service\FilmService.cs" />
@@ -79,7 +79,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataTransfertObjects\FilmDto.cs" />
     <Compile Include="Business\MvvmDto.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

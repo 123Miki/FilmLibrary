@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace FilmLibrary.DataTransfertObjects
+namespace FilmLibrary.Business
 {
     [DataContract]
-    public class FilmDto : MvvmDto
+    public class Film
     {
         [DataMember]
         public Guid FilmId { get; set; }
@@ -20,10 +21,13 @@ namespace FilmLibrary.DataTransfertObjects
 
         [DataMember]
         [Range(0, 5, ErrorMessage = "La note doit être comprise entre 0 .. 5.")]
-        public int Evaluation { get;  set; }
+        public int Evaluation { get; set; }
+
+        [JsonIgnore]
+        [Required]
+        public Director Director { get; set; }
 
         [DataMember]
-        [Required]
-        public DirectorDto Director { get; set; }
+        public Guid DirectorId { get; set; }
     }
 }

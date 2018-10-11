@@ -50,7 +50,7 @@ namespace FilmLibrary.Service
         /// <returns>Réalisateur demandé</returns>
         public Director GetDirector(Guid id)
         {
-            return _directors.FirstOrDefault(d => d.DirectorId == id);
+            return _directors.FirstOrDefault(director => director.DirectorId == id);
         }
 
         /// <summary>
@@ -84,10 +84,8 @@ namespace FilmLibrary.Service
             bool updated = false;
             try
             {
-                var old = GetDirector(director.DirectorId);
-                old = director;
-                // vérif si c'est bon sur la liste
-                // sinon affecter
+                var directorToUpdate = GetDirector(director.DirectorId);
+                directorToUpdate = director;
                 Save();
                 updated = true;
             }

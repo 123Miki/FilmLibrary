@@ -96,6 +96,28 @@ namespace FilmLibrary.Service
             return updated;
         }
 
+        /// <summary>
+        /// Méthode de suppression d'un réalisateur
+        /// </summary>
+        /// <param name="film">Réalisateur à supprimer</param>
+        /// <returns>Retourne un booléen qui indique si la mise à jour s'est bien passée</returns>
+        public bool DeleteDirector(Director director)
+        {
+            bool deleted = false;
+            try
+            {
+                var directorToDelete = GetDirector(director.DirectorId);
+                _directors.Remove(directorToDelete);
+                Save();
+                deleted = true;
+            }
+            catch (Exception e)
+            {
+                Logger.LogMessage(e.Message);
+            }
+            return deleted;
+        }
+
         #endregion
 
         #region Méthodes privées

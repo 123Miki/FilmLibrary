@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace FilmLibrary.Business
 {
     [DataContract]
-    public class Director
+    public class Director: MvvmPropertyChanged
     {
         [DataMember]
         public Guid DirectorId { get; set; }
@@ -31,7 +31,7 @@ namespace FilmLibrary.Business
 
         public override string ToString()
         {
-            return string.Format("{0} - {1}", Name, Firstname);
+            return string.Format("{0} {1}", Name, Firstname);
         }
     }
 }

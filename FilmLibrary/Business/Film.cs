@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 namespace FilmLibrary.Business
 {
     [DataContract]
-    public class Film
+    public class Film : MvvmPropertyChanged
     {
         [DataMember]
         public Guid FilmId { get; set; }
@@ -17,7 +17,7 @@ namespace FilmLibrary.Business
         public string Name { get; set; }
 
         [DataMember]
-        public DateTime Year { get; set; }
+        public int Year { get; set; }
 
         [DataMember]
         [Range(0, 5, ErrorMessage = "La note doit être comprise entre 0 .. 5.")]

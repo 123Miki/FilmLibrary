@@ -4,36 +4,137 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FilmLibrary.Properties"
+        xmlns:control = "clr-namespace:FilmLibrary.View" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Height="450" 
-        Width="800"
+        Height="600" 
+        Width="1080"
         WindowState="Normal"
+        Foreground="White"
+        ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Title="{x:Static local:Resources.FilmTitle}">
+        WindowStyle="None"
+        x:Name="uiAccueil">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="{StaticResource RowItemSpaceMedium}" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="1.2*" />
-        </Grid.ColumnDefinitions>
+    <Window.Resources>
+        <DataTemplate x:Key="FilmListTemplate">
+            <control:FilmList/>
+        </DataTemplate>
 
-        <Label Grid.Row="0"
-               Grid.Column="0"
-               Content="Nom : " />
-        <TextBox Grid.Row="0"
-                 Grid.Column="1" />
+        <DataTemplate x:Key="DirectorListTemplate">
+            <control:DirectorList/>
+        </DataTemplate>
 
-        <Label Grid.Row="2"
-               Grid.Column="0"
-               Content="Prénom : " />
-        <TextBox Grid.Row="2"
-                 Grid.Column="1" />
+        <Style x:Key="selectableContentStyle" TargetType="{x:Type ContentControl}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentMenuSelection, UpdateSourceTrigger=PropertyChanged}" 
+                             Value="FilmItem">
+                    <Setter Property="ContentTemplate" Value="{StaticResource FilmListTemplate}" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding CurrentMenuSelection, UpdateSourceTrigger=PropertyChanged}" 
+                             Value="DirectorItem">
+                    <Setter Property="ContentTemplate" Value="{StaticResource DirectorListTemplate}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
 
+    <Grid Background="#FFDEDEDE">
+        <Grid Height="60" 
+              VerticalAlignment="Top" 
+              Background="#FF5C99D6">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="1" 
+                                  ShadowDepth="1" 
+                                  Color="#FFACACAC"/>
+            </Grid.Effect>
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Right">
+                <Button VerticalAlignment="Center" 
+                        Height="25" 
+                        Width="25" 
+                        Margin="5"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
+                        Background="{x:Null}" 
+                        BorderBrush="{x:Null}"
+                        Click="ButtonPowerOff_Click">
+                    <materialDesign:PackIcon Kind="Power"                                          
+                                             Foreground="LightGray"
+                                             Width="25" Height="25"/>
+                </Button>
+            </StackPanel>
+            <TextBlock Text="{x:Static local:Resources.AppTitle}" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center" 
+                       FontSize="22"/>
+        </Grid>
+        <Grid x:Name="GridMenu" 
+              Width="70" 
+              HorizontalAlignment="Left" 
+              Background="#FF31577E">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="2" 
+                                  ShadowDepth="1" 
+                                  Color="#FFAEAEAE"/>
+            </Grid.Effect>
+            <StackPanel>
+                <Grid Height="60" Background="White" 
+                      RenderTransformOrigin="0.5,0.5">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Button x:Name="ButtonOpenMenu" 
+                            Height="60" 
+                            Width="60" 
+                            Margin="5" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Top" 
+                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
+                            Background="{x:Null}" 
+                            BorderBrush="{x:Null}" 
+                            Foreground="#FF31577E" >
+                        <materialDesign:PackIcon Kind="Menu" 
+                                                 Width="25" 
+                                                 Height="25"/>
+                    </Button>
+                    <Image Height="80" 
+                           VerticalAlignment="Bottom"/>
+                </Grid>
+
+                <ListView x:Name="ListViewMenu" 
+                          Foreground="#FF5C99D6" 
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          SelectionChanged="ListViewMenu_SelectionChanged">
+                    <ListViewItem x:Name="FilmItem" 
+                                  Height="60">
+                        <StackPanel Orientation="Horizontal"
+                                    >
+                            <materialDesign:PackIcon Kind="Movie" 
+                                                     Height="25" 
+                                                     Width="25" 
+                                                     Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem x:Name="DirectorItem" 
+                                  Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="AccountCardDetails" 
+                                                     Height="25" 
+                                                     Width="25" 
+                                                     Margin="10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel>
+            <ContentControl Style="{StaticResource selectableContentStyle}"/>
+        </StackPanel>
     </Grid>
-    
 </Window>

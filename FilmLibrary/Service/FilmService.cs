@@ -94,6 +94,28 @@ namespace FilmLibrary.Service
             return updated;
         }
 
+        /// <summary>
+        /// Méthode de suppression d'un film
+        /// </summary>
+        /// <param name="film">Film à supprimer</param>
+        /// <returns>Retourne un booléen qui indique si la mise à jour s'est bien passée</returns>
+        public bool DeleteFilm(Film film)
+        {
+            bool deleted = false;
+            try
+            {
+                var filmToDelete = GetFilm(film.FilmId);
+                _films.Remove(filmToDelete);
+                Save();
+                deleted = true;
+            }
+            catch (Exception e)
+            {
+                Logger.LogMessage(e.Message);
+            }
+            return deleted;
+        }
+
         #endregion
 
         #region Méthodes privées
@@ -105,6 +127,8 @@ namespace FilmLibrary.Service
         {
             _films = new List<Film>();
             directorService = new DirectorService();
+            _films.Add(new Film() { Director = directorService.GetDirector(new Guid("38b15654-a161-4400-aa82-ed0ce076d9cf")), DirectorId = new Guid("38b15654-a161-4400-aa82-ed0ce076d9cf"), Evaluation = 3, FilmId = Guid.NewGuid(), Name= "Star wars", Year=1990 });
+            Save();
             Load();
         }
 

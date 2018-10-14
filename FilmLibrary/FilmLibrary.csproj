@@ -37,6 +37,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=2.4.1.1101, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.2.4.1.1101\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -69,8 +75,25 @@
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Service\DirectorService.cs" />
     <Compile Include="Service\FilmService.cs" />
+    <Compile Include="ViewModel\AccueilViewModel.cs" />
+    <Compile Include="ViewModel\DirectorSaisieViewModel.cs" />
+    <Compile Include="ViewModel\DirectorViewModel.cs" />
+    <Compile Include="ViewModel\FilmSaisieViewModel.cs" />
+    <Compile Include="ViewModel\FilmViewModel.cs" />
     <Compile Include="View\Accueil.xaml.cs">
       <DependentUpon>Accueil.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DirectorEdit.xaml.cs">
+      <DependentUpon>DirectorEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FilmEdit.xaml.cs">
+      <DependentUpon>FilmEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FilmList.xaml.cs">
+      <DependentUpon>FilmList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DirectorList.xaml.cs">
+      <DependentUpon>DirectorList.xaml</DependentUpon>
     </Compile>
     <Page Include="Assets\Style.xaml">
       <SubType>Designer</SubType>
@@ -84,7 +107,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Business\MvvmDto.cs" />
+    <Compile Include="Business\MvvmPropertyChanged.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -92,6 +115,22 @@
     <Page Include="View\Accueil.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\DirectorEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FilmEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\FilmList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\DirectorList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -123,6 +162,13 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Assets\Pictures\checked.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Pictures\unchecked.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

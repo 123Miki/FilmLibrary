@@ -2,15 +2,10 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace FilmLibrary.DataTransfertObjects
+namespace FilmLibrary.Business
 {
-    [Serializable]
-    public abstract class MvvmDto : INotifyPropertyChanged
+    public abstract class MvvmPropertyChanged : INotifyPropertyChanged
     {
-
-        [field:
-        NonSerializedAttribute
-        ]
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void RaisePropertyChanged([CallerMemberName]string name = "")
@@ -18,17 +13,6 @@ namespace FilmLibrary.DataTransfertObjects
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-        }
-
-        public void RaisePropertyChanged<T>(ref T field, T value, [CallerMemberName]string propertyName = "")
-        {
-            if (field == null && value != null
-                || field != null && value == null
-                || field != null && value != null && !field.Equals(value))
-            {
-                field = value;
-                RaisePropertyChanged(propertyName);
             }
         }
 

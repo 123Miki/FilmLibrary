@@ -49,7 +49,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="520"/>
         </Grid.RowDefinitions>
         <Border BorderThickness="1"
                 BorderBrush="LightGray">
@@ -90,7 +90,19 @@
         <Border BorderThickness="1"
                 BorderBrush="LightGray"
                 Grid.Column="2">
-            <ContentControl Style="{StaticResource selectableContentStyle}"/>
+            
+            <ListView ItemsSource="{Binding Directors}"
+                      SelectedItem="{Binding CurrentDirector}"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      SelectionChanged="ListView_SelectionChanged">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding TextValue}">
+                            <GridViewColumnHeader Content="Réalisateur" />
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </Border>
     </Grid>
 </UserControl>

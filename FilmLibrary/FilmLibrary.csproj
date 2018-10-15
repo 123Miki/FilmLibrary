@@ -37,6 +37,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Data.v17.1, Version=17.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Xpo.v17.1, Version=17.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -72,13 +74,13 @@
     <Compile Include="Business\Director.cs" />
     <Compile Include="Business\Film.cs" />
     <Compile Include="Core\Consts.cs" />
+    <Compile Include="Core\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Core\Logger.cs" />
+    <Compile Include="Core\SimpleCommand.cs" />
     <Compile Include="Service\DirectorService.cs" />
     <Compile Include="Service\FilmService.cs" />
     <Compile Include="ViewModel\AccueilViewModel.cs" />
-    <Compile Include="ViewModel\DirectorSaisieViewModel.cs" />
     <Compile Include="ViewModel\DirectorViewModel.cs" />
-    <Compile Include="ViewModel\FilmSaisieViewModel.cs" />
     <Compile Include="ViewModel\FilmViewModel.cs" />
     <Compile Include="View\Accueil.xaml.cs">
       <DependentUpon>Accueil.xaml</DependentUpon>

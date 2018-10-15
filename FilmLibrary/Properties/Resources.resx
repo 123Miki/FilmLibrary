@@ -120,6 +120,12 @@
   <data name="AppTitle" xml:space="preserve">
     <value>VEGATHEQUE</value>
   </data>
+  <data name="DirectorFirstname" xml:space="preserve">
+    <value>Prénom :</value>
+  </data>
+  <data name="DirectorName" xml:space="preserve">
+    <value>Nom :</value>
+  </data>
   <data name="DirectorTitle" xml:space="preserve">
     <value>REALISATEUR</value>
   </data>

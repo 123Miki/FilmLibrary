@@ -1,8 +1,11 @@
 ﻿using FilmLibrary.Business;
+using FilmLibrary.Core;
 using FilmLibrary.Service;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 
 namespace FilmLibrary.ViewModel
 {
@@ -10,7 +13,8 @@ namespace FilmLibrary.ViewModel
     {
         private ObservableCollection<Director> _directors;
         private DirectorService _directorService;
-        private bool _isReadingMode;
+        private bool _isEditMode;
+        private Director _currentDirector;
         private FilmService _filmService;
         private bool _canDeleteDirector;
 
@@ -26,7 +30,18 @@ namespace FilmLibrary.ViewModel
                 }
             }
         }
-        public Director CurrentDirector { get; set; }
+        public Director CurrentDirector
+        {
+            get { return _currentDirector; }
+            set
+            {
+                if (value != _currentDirector)
+                {
+                    this._currentDirector = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
         public bool CanDeleteDirector
         {
             get { return _canDeleteDirector; }
@@ -39,22 +54,27 @@ namespace FilmLibrary.ViewModel
                 }
             }
         }
-        public bool IsReadingMode
+        public bool IsEditMode
         {
             get
             {
-                return _isReadingMode;
+                return _isEditMode;
             }
 
             set
             {
-                if (value != _isReadingMode)
+                if (value != _isEditMode)
                 {
-                    this._isReadingMode = value;
+                    this._isEditMode = value;
                     RaisePropertyChanged();
                 }
             }
         }
+
+        public ICommand ValidCommand { get; set; }
+        public ICommand AddDirectorCommand { get; set; }
+        public ICommand DeleteDirectorCommand { get; set; }
+
 
         public DirectorViewModel()
         {
@@ -62,9 +82,27 @@ namespace FilmLibrary.ViewModel
             _filmService = new FilmService();
             InitList();
             CanDeleteDirector = false;
-            IsReadingMode = true;
             CurrentDirector = new Director();
             CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
+            ValidCommand = new SimpleCommand(() => ValidDirector(), CanExecute);
+            AddDirectorCommand = new SimpleCommand(() => AddDirector(), CanExecute);
+            DeleteDirectorCommand = new SimpleCommand(() => DeleteDirector(), CanExecute);
+        }
+
+        private void AddDirector()
+        {
+            CurrentDirector = new Director();
+        }
+
+        private void ValidDirector()
+        {
+            _directorService.SaveOrUpdateDirector(CurrentDirector);
+            InitList();
+        }
+
+        private bool CanExecute()
+        {
+            return CurrentDirector != null;
         }
 
         private void Director_PropertyChanged(object sender, PropertyChangedEventArgs e)

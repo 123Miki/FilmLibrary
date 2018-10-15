@@ -127,8 +127,8 @@ namespace FilmLibrary.Service
         {
             _films = new List<Film>();
             directorService = new DirectorService();
-            _films.Add(new Film() { Director = directorService.GetDirector(new Guid("38b15654-a161-4400-aa82-ed0ce076d9cf")), DirectorId = new Guid("38b15654-a161-4400-aa82-ed0ce076d9cf"), Evaluation = 3, FilmId = Guid.NewGuid(), Name= "Star wars", Year=1990 });
-            Save();
+            //_films.Add(new Film() { Director = directorService.GetDirector(new Guid("38b15654-a161-4400-aa82-ed0ce076d9cf")), DirectorId = new Guid("38b15654-a161-4400-aa82-ed0ce076d9cf"), Evaluation = 3, FilmId = Guid.NewGuid(), Name= "Star wars", Year=1990 });
+            //Save();
             Load();
         }
 

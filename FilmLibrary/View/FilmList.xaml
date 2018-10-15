@@ -4,14 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FilmLibrary.View"
+             xmlns:Converters="clr-namespace:FilmLibrary.Core.Converters"             
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-
+    <UserControl.Resources>
+        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid Background="#FFDEDEDE"
           Margin="80,70,10,10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
@@ -19,7 +24,8 @@
             <RowDefinition Height="520"/>
         </Grid.RowDefinitions>
         <Border BorderThickness="1"
-                BorderBrush="LightGray">
+                BorderBrush="LightGray"
+                Background="AliceBlue">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="ACTIONS"
                            Foreground="Gray"
@@ -55,7 +61,8 @@
         </Border>
         <Border BorderThickness="1"
                 BorderBrush="LightGray"
-                Grid.Column="2">
+                Grid.Column="2"
+                Background="AliceBlue">
             <ListView ItemsSource="{Binding Films}"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       SelectedItem="{Binding CurrentFilm}"
@@ -77,6 +84,29 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+        </Border>
+        <Border BorderThickness="1"
+                BorderBrush="LightGray"
+                Grid.Column="4"
+                Background="AliceBlue"
+                Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
+            <Calendar x:Name="_calendar"
+                      DisplayModeChanged="_calendar_DisplayModeChanged"
+                      Loaded="_calendar_Loaded" />
+            <!--<DatePicker SelectedDate="{Binding Path = SellStartDate, StringFormat = {}{0:yyyy}}">
+                <DatePicker.Resources>
+                    <Style TargetType="DatePickerTextBox">
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <TextBox x:Name="PART_TextBox"
+                                             Text="{Binding Path=SelectedDate, StringFormat = {}{0:yyyy}, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DatePicker.Resources>
+            </DatePicker>-->
         </Border>
     </Grid>
 </UserControl>

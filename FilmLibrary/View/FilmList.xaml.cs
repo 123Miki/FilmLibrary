@@ -39,5 +39,15 @@ namespace FilmLibrary.View
         {
             ViewModel.DeleteFilm();
         }
+
+        private void _calendar_DisplayModeChanged(object sender, CalendarModeChangedEventArgs e)
+        {
+            _calendar.DisplayMode = CalendarMode.Year;
+        }
+
+        private void _calendar_Loaded(object sender, RoutedEventArgs e)
+        {
+            _calendar.DisplayMode = CalendarMode.Year;
+        }
     }
 }

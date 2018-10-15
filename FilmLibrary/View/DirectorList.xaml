@@ -4,42 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FilmLibrary.View"
+             xmlns:properties="clr-namespace:FilmLibrary.Properties"
+             xmlns:Converters="clr-namespace:FilmLibrary.Core.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="600" 
              d:DesignWidth="1080">
     <UserControl.Resources>
-        <DataTemplate x:Key="DirectorListTemplate">
-            <ListView ItemsSource="{Binding Directors}"
-                      SelectedItem="{Binding CurrentDirector}"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      SelectionChanged="ListView_SelectionChanged">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding TextValue}">
-                            <GridViewColumnHeader Content="Réalisateur" />
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </DataTemplate>
-
-        <DataTemplate x:Key="DirectorEditTemplate">
-            <local:DirectorEdit/>
-        </DataTemplate>
-
-        <Style x:Key="selectableContentStyle" TargetType="{x:Type ContentControl}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsReadingMode, UpdateSourceTrigger=PropertyChanged}" 
-                             Value="true">
-                    <Setter Property="ContentTemplate" Value="{StaticResource DirectorListTemplate}" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsReadingMode, UpdateSourceTrigger=PropertyChanged}" 
-                             Value="false">
-                    <Setter Property="ContentTemplate" Value="{StaticResource DirectorEditTemplate}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
+        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
     <Grid Background="#FFDEDEDE"
           Margin="80,70,10,10">
@@ -47,12 +19,15 @@
             <ColumnDefinition Width="80" />
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="520"/>
         </Grid.RowDefinitions>
         <Border BorderThickness="1"
-                BorderBrush="LightGray">
+                BorderBrush="LightGray"
+                Background="AliceBlue">
             <StackPanel Orientation="Vertical">
                 <TextBlock Text="ACTIONS"
                            Foreground="Gray"
@@ -67,7 +42,7 @@
                         Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
                         Background="{x:Null}" 
                         BorderBrush="{x:Null}"
-                        Click="ButtonAdd_Click">
+                        Command="{Binding AddDirectorCommand}">
                     <materialDesign:PackIcon Kind="PlusCircle"                                          
                                              Foreground="Gray"
                                              Width="25" Height="25"/>
@@ -80,7 +55,7 @@
                         Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
                         Background="{x:Null}" 
                         BorderBrush="{x:Null}"
-                        Click="ButtonDelete_Click">
+                        Command="{Binding DeleteDirectorCommand}">
                     <materialDesign:PackIcon Kind="DeleteCircle"                                          
                                              Foreground="Gray"
                                              Width="25" Height="25"/>
@@ -89,11 +64,12 @@
         </Border>
         <Border BorderThickness="1"
                 BorderBrush="LightGray"
-                Grid.Column="2">
-            
+                Grid.Column="2"
+                Background="AliceBlue">            
             <ListView ItemsSource="{Binding Directors}"
-                      SelectedItem="{Binding CurrentDirector}"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      SelectedItem="{Binding CurrentDirector, UpdateSourceTrigger=PropertyChanged}"
+                      Width="650"
+                      ScrollViewer.CanContentScroll="True"
                       SelectionChanged="ListView_SelectionChanged">
                 <ListView.View>
                     <GridView>
@@ -103,6 +79,60 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+        </Border>
+        <Border BorderThickness="1"
+                BorderBrush="LightGray"
+                Grid.Column="4"
+                Background="AliceBlue">
+            <!--Visibility="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}">-->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="{StaticResource RowItemSpaceMedium}" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="{StaticResource RowItemSpaceMedium}" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="1.2*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       Content="{x:Static properties:Resources.DirectorName}" />
+                <TextBox Text="{Binding CurrentDirector.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         Grid.Row="0"
+                         Foreground="Black"
+                         Grid.Column="1" 
+                         Width="80"/>
+
+                <Label Grid.Row="2"
+                       Grid.Column="0"
+                       Content="{x:Static properties:Resources.DirectorFirstname}" />
+                <TextBox Text="{Binding CurrentDirector.Firstname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         Foreground="Black"
+                         Grid.Row="2"
+                         Grid.Column="1"
+                         Width="80"/>
+
+                <Button x:Name="ValidButton"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Command="{Binding ValidCommand}"
+                        VerticalAlignment="Bottom"
+                        Height="25"
+                        Width="25"
+                        Margin="5"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                        Background="{x:Null}"
+                        BorderBrush="{x:Null}">
+                    <materialDesign:PackIcon Kind="Approval"
+                                             Foreground="Gray"
+                                             Width="25"
+                                             Height="25" />
+                </Button>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

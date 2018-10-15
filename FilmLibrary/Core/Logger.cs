@@ -13,8 +13,6 @@ namespace FilmLibrary.Core
                 streamWriter.WriteLine("[" + DateTime.Now + "] : " + message);
                 streamWriter.Close();
             }
-
-            MessageBox.Show(message);
         }
     }
 }

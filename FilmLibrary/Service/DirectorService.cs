@@ -14,8 +14,7 @@ namespace FilmLibrary.Service
     {
         List<Director> GetDirectors();
         Director GetDirector(Guid id);
-        bool SaveDirector(Director director);
-        bool UpdateDirector(Director director);
+        bool SaveOrUpdateDirector(Director director);
     }
 
     #endregion 
@@ -40,6 +39,10 @@ namespace FilmLibrary.Service
         /// <returns>Liste des réalisateurs</returns>
         public List<Director> GetDirectors()
         {
+            if (_directors == null)
+            {
+                return new List<Director>();
+            }
             return _directors;
         }
 
@@ -53,16 +56,33 @@ namespace FilmLibrary.Service
             return _directors.FirstOrDefault(director => director.DirectorId == id);
         }
 
+        public bool SaveOrUpdateDirector(Director director)
+        {
+            if (director != null)
+            {
+                if (director.DirectorId != null && director.DirectorId != Guid.Empty)
+                {
+                    return UpdateDirector(director);
+                }
+                else
+                {
+                    return SaveDirector(director);
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// Méthode permettant d'enregistrer un nouveau réalisateur
         /// </summary>
         /// <param name="director">Nouveau réalisateur</param>
         /// <returns>Retourne un booléen qui indique si la sauvegarde s'est bien passée</returns>
-        public bool SaveDirector(Director director)
+        private bool SaveDirector(Director director)
         {
             bool saved = false;
             try
             {
+                director.DirectorId = Guid.NewGuid();
                 _directors.Add(director);
                 Save();
                 saved = true;
@@ -79,7 +99,7 @@ namespace FilmLibrary.Service
         /// </summary>
         /// <param name="director">Réalisateur à mettre à jour</param>
         /// <returns>Retourne un booléen qui indique si la mise à jour s'est bien passée</returns>
-        public bool UpdateDirector(Director director)
+        private bool UpdateDirector(Director director)
         {
             bool updated = false;
             try
@@ -128,6 +148,7 @@ namespace FilmLibrary.Service
         private void Init()
         {
             _directors = new List<Director>();
+            //_directors.Add(new Director() { })
             Load();
         }
 
@@ -147,6 +168,10 @@ namespace FilmLibrary.Service
 
                 string json = File.ReadAllText(DataFilePosition.Director);
                 _directors = JsonConvert.DeserializeObject<List<Director>>(json);
+                if(_directors == null)
+                {
+                    _directors = new List<Director>();
+                }
             }
             catch (Exception e)
             {

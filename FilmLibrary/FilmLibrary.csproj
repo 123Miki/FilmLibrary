@@ -75,6 +75,7 @@
     <Compile Include="Business\Film.cs" />
     <Compile Include="Core\Consts.cs" />
     <Compile Include="Core\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Core\Helpers\ValidateHelper.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\SimpleCommand.cs" />
     <Compile Include="Service\DirectorService.cs" />

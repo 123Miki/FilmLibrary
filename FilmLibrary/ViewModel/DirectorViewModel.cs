@@ -1,5 +1,6 @@
 ﻿using FilmLibrary.Business;
 using FilmLibrary.Core;
+using FilmLibrary.Core.Helpers;
 using FilmLibrary.Service;
 using System;
 using System.Collections.ObjectModel;
@@ -13,7 +14,6 @@ namespace FilmLibrary.ViewModel
     {
         private ObservableCollection<Director> _directors;
         private DirectorService _directorService;
-        private bool _isEditMode;
         private Director _currentDirector;
         private FilmService _filmService;
         private bool _canDeleteDirector;
@@ -54,27 +54,12 @@ namespace FilmLibrary.ViewModel
                 }
             }
         }
-        public bool IsEditMode
-        {
-            get
-            {
-                return _isEditMode;
-            }
-
-            set
-            {
-                if (value != _isEditMode)
-                {
-                    this._isEditMode = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
 
         public ICommand ValidCommand { get; set; }
         public ICommand AddDirectorCommand { get; set; }
         public ICommand DeleteDirectorCommand { get; set; }
 
+        #region Méthodes publics
 
         public DirectorViewModel()
         {
@@ -85,43 +70,8 @@ namespace FilmLibrary.ViewModel
             CurrentDirector = new Director();
             CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
             ValidCommand = new SimpleCommand(() => ValidDirector(), CanExecute);
-            AddDirectorCommand = new SimpleCommand(() => AddDirector(), CanExecute);
-            DeleteDirectorCommand = new SimpleCommand(() => DeleteDirector(), CanExecute);
-        }
-
-        private void AddDirector()
-        {
-            CurrentDirector = new Director();
-        }
-
-        private void ValidDirector()
-        {
-            _directorService.SaveOrUpdateDirector(CurrentDirector);
-            InitList();
-        }
-
-        private bool CanExecute()
-        {
-            return CurrentDirector != null;
-        }
-
-        private void Director_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            CheckCanDeleteDirector();
-        }
-
-        public void DeleteDirector()
-        {
-            if (CanDeleteDirector)
-            {
-                _directorService.DeleteDirector(CurrentDirector);
-                InitList();
-            }
-        }
-
-        private void InitList()
-        {
-            Directors = new ObservableCollection<Director>(_directorService.GetDirectors());
+            AddDirectorCommand = new SimpleCommand(() => AddDirector());
+            DeleteDirectorCommand = new SimpleCommand(() => DeleteDirector());
         }
 
         public void CheckCanDeleteDirector()
@@ -143,5 +93,50 @@ namespace FilmLibrary.ViewModel
                 CanDeleteDirector = false;
             }
         }
+
+        #endregion
+
+        #region Méthodes privées
+
+        private void ValidDirector()
+        {
+            _directorService.SaveOrUpdateDirector(CurrentDirector);
+            InitList();
+        }
+
+        private void DeleteDirector()
+        {
+            if (CanDeleteDirector)
+            {
+                _directorService.DeleteDirector(CurrentDirector);
+                InitList();
+                CurrentDirector = new Director();
+            }
+        }
+
+        private void AddDirector()
+        {
+            CurrentDirector = new Director();
+            CurrentDirector.DirectorId = Guid.NewGuid();
+        }        
+
+        private bool CanExecute()
+        {
+            return CurrentDirector != null
+                && ValidateHelper.ValidateObject(CurrentDirector);
+        }
+
+        private void Director_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            CheckCanDeleteDirector();
+            ValidCommand.CanExecute()
+        }        
+
+        private void InitList()
+        {
+            Directors = new ObservableCollection<Director>(_directorService.GetDirectors());
+        }
+
+        #endregion
     }
 }

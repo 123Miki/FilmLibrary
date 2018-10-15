@@ -1,6 +1,5 @@
 ﻿using FilmLibrary.Business;
 using FilmLibrary.ViewModel;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace FilmLibrary.View

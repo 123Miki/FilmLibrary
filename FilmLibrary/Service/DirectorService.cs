@@ -60,7 +60,8 @@ namespace FilmLibrary.Service
         {
             if (director != null)
             {
-                if (director.DirectorId != null && director.DirectorId != Guid.Empty)
+                var isDirectorExist = _directors.Any(x => x.DirectorId == director.DirectorId);
+                if (director.DirectorId != null && isDirectorExist)
                 {
                     return UpdateDirector(director);
                 }
@@ -82,7 +83,6 @@ namespace FilmLibrary.Service
             bool saved = false;
             try
             {
-                director.DirectorId = Guid.NewGuid();
                 _directors.Add(director);
                 Save();
                 saved = true;

@@ -18,7 +18,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80" />
             <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="650" />
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -66,8 +66,11 @@
                 BorderBrush="LightGray"
                 Grid.Column="2"
                 Background="AliceBlue">            
-            <ListView ItemsSource="{Binding Directors}"
+            <ListView ItemsSource="{Binding Directors}"                      
                       SelectedItem="{Binding CurrentDirector, UpdateSourceTrigger=PropertyChanged}"
+                      VerticalAlignment="Top"
+                      MaxHeight="520"
+                      MaxWidth="650"
                       Width="650"
                       ScrollViewer.CanContentScroll="True"
                       SelectionChanged="ListView_SelectionChanged">
@@ -83,8 +86,9 @@
         <Border BorderThickness="1"
                 BorderBrush="LightGray"
                 Grid.Column="4"
+                Height="100"
+                VerticalAlignment="Top"
                 Background="AliceBlue">
-            <!--Visibility="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}">-->
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -104,8 +108,8 @@
                 <TextBox Text="{Binding CurrentDirector.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                          Grid.Row="0"
                          Foreground="Black"
-                         Grid.Column="1" 
-                         Width="80"/>
+                         Grid.Column="1"
+                         Margin="0,0,5,0"/>
 
                 <Label Grid.Row="2"
                        Grid.Column="0"
@@ -114,13 +118,14 @@
                          Foreground="Black"
                          Grid.Row="2"
                          Grid.Column="1"
-                         Width="80"/>
+                         Margin="0,0,5,0"/>
 
                 <Button x:Name="ValidButton"
                         Grid.Row="4"
                         Grid.Column="1"
-                        Command="{Binding ValidCommand}"
+                        Command="{Binding ValidCommand, UpdateSourceTrigger=PropertyChanged}"
                         VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right"
                         Height="25"
                         Width="25"
                         Margin="5"

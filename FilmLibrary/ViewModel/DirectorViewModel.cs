@@ -6,6 +6,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace FilmLibrary.ViewModel
@@ -55,9 +56,9 @@ namespace FilmLibrary.ViewModel
             }
         }
 
-        public ICommand ValidCommand { get; set; }
-        public ICommand AddDirectorCommand { get; set; }
-        public ICommand DeleteDirectorCommand { get; set; }
+        public SimpleCommand ValidCommand { get; set; }
+        public SimpleCommand AddDirectorCommand { get; set; }
+        public SimpleCommand DeleteDirectorCommand { get; set; }
 
         #region Méthodes publics
 
@@ -108,15 +109,20 @@ namespace FilmLibrary.ViewModel
         {
             if (CanDeleteDirector)
             {
-                _directorService.DeleteDirector(CurrentDirector);
-                InitList();
-                CurrentDirector = new Director();
+                if (ConfirmationHelper.ConfirmationYesNo("Voulez-vous vraiment supprimer ce élément ?", "Confirmation"))
+                {
+                    _directorService.DeleteDirector(CurrentDirector);
+                    InitList();
+                    CurrentDirector = new Director();
+                    CurrentDirector.PropertyChanged += Director_PropertyChanged;
+                }
             }
         }
 
         private void AddDirector()
         {
             CurrentDirector = new Director();
+            CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
             CurrentDirector.DirectorId = Guid.NewGuid();
         }        
 
@@ -129,12 +135,16 @@ namespace FilmLibrary.ViewModel
         private void Director_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             CheckCanDeleteDirector();
-            ValidCommand.CanExecute()
+            ValidCommand.RaiseCanExecuteChanged();
         }        
 
         private void InitList()
         {
             Directors = new ObservableCollection<Director>(_directorService.GetDirectors());
+            foreach (Director director in Directors)
+            {
+                CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
+            }
         }
 
         #endregion

@@ -123,7 +123,7 @@
                 <Button x:Name="ValidButton"
                         Grid.Row="4"
                         Grid.Column="1"
-                        Command="{Binding ValidCommand, UpdateSourceTrigger=PropertyChanged}"
+                        Command="{Binding ValidCommand}"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Right"
                         Height="25"

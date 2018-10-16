@@ -12,7 +12,7 @@ namespace FilmLibrary.Business
         public Guid FilmId { get; set; }
 
         [DataMember]
-        [Required]
+        [Required(ErrorMessage = "Champ obligatoire")]
         [StringLength(250)]
         public string Name { get; set; }
 
@@ -24,7 +24,7 @@ namespace FilmLibrary.Business
         public int Evaluation { get; set; }
 
         [JsonIgnore]
-        [Required]
+        [Required(ErrorMessage = "Champ obligatoire")]
         public Director Director { get; set; }
 
         [DataMember]

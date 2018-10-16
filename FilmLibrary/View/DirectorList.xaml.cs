@@ -19,8 +19,8 @@ namespace FilmLibrary.View
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            ViewModel.InitCurrentItem();
             ViewModel.CheckCanDeleteDirector();
-
         }
     }
 }

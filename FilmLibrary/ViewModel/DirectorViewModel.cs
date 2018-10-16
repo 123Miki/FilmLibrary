@@ -18,7 +18,7 @@ namespace FilmLibrary.ViewModel
         private Director _currentDirector;
         private FilmService _filmService;
         private bool _canDeleteDirector;
-
+         
         public ObservableCollection<Director> Directors
         {
             get { return _directors; }
@@ -27,7 +27,7 @@ namespace FilmLibrary.ViewModel
                 if (value != _directors)
                 {
                     this._directors = value;
-                    RaisePropertyChanged();
+                    RaisePropertyChanged("Directors");
                 }
             }
         }
@@ -39,7 +39,7 @@ namespace FilmLibrary.ViewModel
                 if (value != _currentDirector)
                 {
                     this._currentDirector = value;
-                    RaisePropertyChanged();
+                    RaisePropertyChanged("CurrentDirector");
                 }
             }
         }
@@ -70,7 +70,7 @@ namespace FilmLibrary.ViewModel
             CanDeleteDirector = false;
             CurrentDirector = new Director();
             CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
-            ValidCommand = new SimpleCommand(() => ValidDirector(), CanExecute);
+            ValidCommand = new SimpleCommand(() => ValidDirector(), CanValid);
             AddDirectorCommand = new SimpleCommand(() => AddDirector());
             DeleteDirectorCommand = new SimpleCommand(() => DeleteDirector());
         }
@@ -126,7 +126,7 @@ namespace FilmLibrary.ViewModel
             CurrentDirector.DirectorId = Guid.NewGuid();
         }        
 
-        private bool CanExecute()
+        private bool CanValid()
         {
             return CurrentDirector != null
                 && ValidateHelper.ValidateObject(CurrentDirector);
@@ -141,10 +141,19 @@ namespace FilmLibrary.ViewModel
         private void InitList()
         {
             Directors = new ObservableCollection<Director>(_directorService.GetDirectors());
-            foreach (Director director in Directors)
+            if (Directors != null)
             {
-                CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
+                foreach (Director director in Directors)
+                {
+                    director.RegisterPropertyChanged(Director_PropertyChanged);
+                }
             }
+        }
+
+        public void InitCurrentItem()
+        {
+            CurrentDirector = new Director() { DirectorId = CurrentDirector.DirectorId, Firstname = CurrentDirector.Firstname, Name = CurrentDirector.Name };
+            CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
         }
 
         #endregion

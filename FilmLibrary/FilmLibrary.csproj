@@ -76,6 +76,7 @@
     <Compile Include="Core\Consts.cs" />
     <Compile Include="Core\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Core\Helpers\ConfirmationHelper.cs" />
+    <Compile Include="Core\Helpers\ObjectExtensionHelper.cs" />
     <Compile Include="Core\Helpers\ValidateHelper.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\SimpleCommand.cs" />

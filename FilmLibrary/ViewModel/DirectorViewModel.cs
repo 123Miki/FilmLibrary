@@ -6,31 +6,18 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
-using System.Windows.Input;
 
 namespace FilmLibrary.ViewModel
 {
     public class DirectorViewModel : MvvmPropertyChanged
     {
-        private ObservableCollection<Director> _directors;
         private DirectorService _directorService;
         private Director _currentDirector;
+        private Director _directorEdit;
         private FilmService _filmService;
         private bool _canDeleteDirector;
          
-        public ObservableCollection<Director> Directors
-        {
-            get { return _directors; }
-            set
-            {
-                if (value != _directors)
-                {
-                    this._directors = value;
-                    RaisePropertyChanged("Directors");
-                }
-            }
-        }
+        public ObservableCollection<Director> Directors { get; set; }
         public Director CurrentDirector
         {
             get { return _currentDirector; }
@@ -40,6 +27,18 @@ namespace FilmLibrary.ViewModel
                 {
                     this._currentDirector = value;
                     RaisePropertyChanged("CurrentDirector");
+                }
+            }
+        }
+        public Director DirectorEdit
+        {
+            get { return _directorEdit; }
+            set
+            {
+                if (value != _directorEdit)
+                {
+                    this._directorEdit = value;
+                    RaisePropertyChanged("DirectorEdit");
                 }
             }
         }
@@ -70,6 +69,9 @@ namespace FilmLibrary.ViewModel
             CanDeleteDirector = false;
             CurrentDirector = new Director();
             CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
+            DirectorEdit = new Director();
+            DirectorEdit.RegisterPropertyChanged(Director_PropertyChanged);
+
             ValidCommand = new SimpleCommand(() => ValidDirector(), CanValid);
             AddDirectorCommand = new SimpleCommand(() => AddDirector());
             DeleteDirectorCommand = new SimpleCommand(() => DeleteDirector());
@@ -101,8 +103,19 @@ namespace FilmLibrary.ViewModel
 
         private void ValidDirector()
         {
-            _directorService.SaveOrUpdateDirector(CurrentDirector);
-            InitList();
+            var directorToEdit = Directors.Where(x => x.DirectorId == DirectorEdit.DirectorId).FirstOrDefault();
+
+            if (directorToEdit != null)
+            {
+                directorToEdit.DirectorId = DirectorEdit.DirectorId;
+                directorToEdit.Name = DirectorEdit.Name;
+                directorToEdit.Firstname = DirectorEdit.Firstname;
+            }
+            else
+            {
+                Directors.Add(DirectorEdit);
+            }
+            _directorService.SaveOrUpdateDirector(DirectorEdit);
         }
 
         private void DeleteDirector()
@@ -111,10 +124,15 @@ namespace FilmLibrary.ViewModel
             {
                 if (ConfirmationHelper.ConfirmationYesNo("Voulez-vous vraiment supprimer ce élément ?", "Confirmation"))
                 {
-                    _directorService.DeleteDirector(CurrentDirector);
-                    InitList();
-                    CurrentDirector = new Director();
-                    CurrentDirector.PropertyChanged += Director_PropertyChanged;
+                    var directorToDelete = Directors.Where(x => x.DirectorId == DirectorEdit.DirectorId).FirstOrDefault();
+                    if (directorToDelete != null)
+                    {
+                        Directors.Remove(directorToDelete);
+                        _directorService.DeleteDirector(directorToDelete);
+                        directorToDelete.PropertyChanged -= Director_PropertyChanged;
+                        CurrentDirector = new Director();
+                        CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
+                    }
                 }
             }
         }
@@ -128,12 +146,21 @@ namespace FilmLibrary.ViewModel
 
         private bool CanValid()
         {
-            return CurrentDirector != null
-                && ValidateHelper.ValidateObject(CurrentDirector);
+            return DirectorEdit != null
+                && ValidateHelper.ValidateObject(DirectorEdit);
         }
 
         private void Director_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == this.GetPropertyName(() => CurrentDirector))
+            {
+                if(CurrentDirector != null)
+                {
+                    DirectorEdit.DirectorId = CurrentDirector.DirectorId;
+                    DirectorEdit.Name = CurrentDirector.Name;
+                    DirectorEdit.Firstname = CurrentDirector.Firstname;
+                }                
+            }
             CheckCanDeleteDirector();
             ValidCommand.RaiseCanExecuteChanged();
         }        
@@ -152,8 +179,12 @@ namespace FilmLibrary.ViewModel
 
         public void InitCurrentItem()
         {
-            CurrentDirector = new Director() { DirectorId = CurrentDirector.DirectorId, Firstname = CurrentDirector.Firstname, Name = CurrentDirector.Name };
-            CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
+            if (CurrentDirector != null)
+            {
+                CurrentDirector = new Director() { DirectorId = CurrentDirector.DirectorId, Firstname = CurrentDirector.Firstname, Name = CurrentDirector.Name };
+                CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
+                this.RaisePropertyChanged("CurrentDirector");
+            }
         }
 
         #endregion

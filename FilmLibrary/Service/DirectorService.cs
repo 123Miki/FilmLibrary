@@ -60,15 +60,7 @@ namespace FilmLibrary.Service
         {
             if (director != null)
             {
-                var isDirectorExist = _directors.Any(x => x.DirectorId == director.DirectorId);
-                if (director.DirectorId != null && isDirectorExist)
-                {
-                    return UpdateDirector(director);
-                }
-                else
-                {
-                    return SaveDirector(director);
-                }
+                Save();
             }
             return false;
         }

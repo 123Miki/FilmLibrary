@@ -23,6 +23,7 @@ namespace FilmLibrary.Business
                 {
                     this._name = value;
                     RaisePropertyChanged("Name");
+                    ValidateModelProperty(_name, "Name");
                 }
             }
         }
@@ -40,6 +41,7 @@ namespace FilmLibrary.Business
                 {
                     this._firstName = value;
                     RaisePropertyChanged("Firstname");
+                    ValidateModelProperty(_firstName, "Name");
                 }
             }
         }

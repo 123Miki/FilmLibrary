@@ -104,20 +104,54 @@
                 <Label Grid.Row="0"
                        Grid.Column="0"
                        Content="{x:Static properties:Resources.DirectorName}" />
-                <TextBox Text="{Binding DirectorEdit.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                <TextBox Text="{Binding DirectorEdit.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, NotifyOnValidationError=True}"
                          Grid.Row="0"
                          Foreground="Black"
                          Grid.Column="1"
-                         Margin="0,0,5,0"/>
+                         Margin="0,0,5,0">
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel>
+                                <!-- Placeholder for the TextBox itself -->
+                                <AdornedElementPlaceholder x:Name="textBox" />
+                                <ItemsControl ItemsSource="{Binding}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding ErrorContent}"
+                                                       Foreground="Red" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+                </TextBox>
 
                 <Label Grid.Row="2"
                        Grid.Column="0"
                        Content="{x:Static properties:Resources.DirectorFirstname}" />
-                <TextBox Text="{Binding DirectorEdit.Firstname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                <TextBox Text="{Binding DirectorEdit.Firstname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, NotifyOnValidationError=True}"
                          Foreground="Black"
                          Grid.Row="2"
                          Grid.Column="1"
-                         Margin="0,0,5,0"/>
+                         Margin="0,0,5,0">
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel>
+                                <!-- Placeholder for the TextBox itself -->
+                                <AdornedElementPlaceholder x:Name="textBox" />
+                                <ItemsControl ItemsSource="{Binding}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding ErrorContent}"
+                                                       Foreground="Red" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+                </TextBox>
 
                 <Button x:Name="ValidButton"
                         Grid.Row="4"

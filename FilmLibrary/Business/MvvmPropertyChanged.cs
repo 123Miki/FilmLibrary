@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace FilmLibrary.Business
 {
-    public abstract class MvvmPropertyChanged : INotifyPropertyChanged
+    public abstract class MvvmPropertyChanged : MvvmErrorChanged, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -100,7 +100,9 @@ namespace FilmLibrary.Service
             try
             {
                 var directorToUpdate = GetDirector(director.DirectorId);
-                directorToUpdate = director;
+                directorToUpdate.DirectorId = director.DirectorId;
+                directorToUpdate.Name = director.Name;
+                directorToUpdate.Firstname = director.Firstname;
                 Save();
                 updated = true;
             }

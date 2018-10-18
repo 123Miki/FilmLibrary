@@ -66,14 +66,13 @@
                 BorderBrush="LightGray"
                 Grid.Column="2"
                 Background="AliceBlue">
-            <ListView ItemsSource="{Binding Directors, UpdateSourceTrigger=PropertyChanged}"                      
-                      SelectedItem="{Binding CurrentDirector, UpdateSourceTrigger=PropertyChanged}"
+            <ListView ItemsSource="{Binding Directors}"                      
+                      SelectedItem="{Binding CurrentDirector, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                       VerticalAlignment="Top"
                       MaxHeight="520"
                       MaxWidth="650"
                       Width="650"
-                      ScrollViewer.CanContentScroll="True"
-                      SelectionChanged="ListView_SelectionChanged">
+                      ScrollViewer.CanContentScroll="True">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding TextValue}">

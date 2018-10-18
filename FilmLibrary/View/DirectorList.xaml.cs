@@ -16,10 +16,5 @@ namespace FilmLibrary.View
             InitializeComponent();
             DataContext = ViewModel;
         }
-
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ViewModel.InitCurrentItem();
-        }
     }
 }

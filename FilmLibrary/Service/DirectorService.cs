@@ -58,11 +58,14 @@ namespace FilmLibrary.Service
 
         public bool SaveOrUpdateDirector(Director director)
         {
-            if (director != null)
+            if (GetDirector(director.DirectorId) != null)
             {
-                Save();
+                return UpdateDirector(director);
             }
-            return false;
+            else
+            {
+                return SaveDirector(director);
+            }
         }
 
         /// <summary>

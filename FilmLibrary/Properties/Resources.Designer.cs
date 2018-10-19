@@ -61,6 +61,15 @@ namespace FilmLibrary.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ACTIONS.
+        /// </summary>
+        public static string ActionTitle {
+            get {
+                return ResourceManager.GetString("ActionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to VEGATHEQUE.
         /// </summary>
         public static string AppTitle {

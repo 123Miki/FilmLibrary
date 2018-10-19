@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FilmLibrary.View"
              xmlns:properties="clr-namespace:FilmLibrary.Properties"
              xmlns:Converters="clr-namespace:FilmLibrary.Core.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -29,7 +28,7 @@
                 BorderBrush="LightGray"
                 Background="AliceBlue">
             <StackPanel Orientation="Vertical">
-                <TextBlock Text="ACTIONS"
+                <TextBlock Text="{x:Static properties:Resources.ActionTitle}"
                            Foreground="Gray"
                            FontWeight="Bold"
                            HorizontalAlignment="Center"

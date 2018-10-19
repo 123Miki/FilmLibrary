@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FilmLibrary.View"
+             xmlns:properties="clr-namespace:FilmLibrary.Properties"
              xmlns:Converters="clr-namespace:FilmLibrary.Core.Converters"             
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
@@ -16,9 +17,9 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80" />
             <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="650" />
             <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="520"/>
@@ -63,23 +64,26 @@
                 BorderBrush="LightGray"
                 Grid.Column="2"
                 Background="AliceBlue">
-            <ListView ItemsSource="{Binding Films}"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                      SelectedItem="{Binding CurrentFilm}"
-                      SelectionChanged="ListView_SelectionChanged">
+            <ListView ItemsSource="{Binding Films, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding CurrentFilm, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                      VerticalAlignment="Top"
+                      MaxHeight="520"
+                      MaxWidth="650"
+                      Width="650"
+                      ScrollViewer.CanContentScroll="True">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Name}">
-                            <GridViewColumnHeader Content="Film" />
+                            <GridViewColumnHeader Content="{x:Static properties:Resources.FilmNameTilte}" />
                         </GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Director.TextValue}">
-                            <GridViewColumnHeader Content="Réalisateur" />
+                            <GridViewColumnHeader Content="{x:Static properties:Resources.FilmDirectorTitle}" />
                         </GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Year}">
-                            <GridViewColumnHeader Content="Année" />
+                            <GridViewColumnHeader Content="{x:Static properties:Resources.FilmReleaseDateTitle}" />
                         </GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Evaluation}">
-                            <GridViewColumnHeader Content="Note" />
+                            <GridViewColumnHeader Content="{x:Static properties:Resources.FilmEvaluationTitle}" />
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
@@ -88,25 +92,81 @@
         <Border BorderThickness="1"
                 BorderBrush="LightGray"
                 Grid.Column="4"
-                Background="AliceBlue"
-                Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">
-            <Calendar x:Name="_calendar"
-                      DisplayModeChanged="_calendar_DisplayModeChanged"
-                      Loaded="_calendar_Loaded" />
-            <!--<DatePicker SelectedDate="{Binding Path = SellStartDate, StringFormat = {}{0:yyyy}}">
-                <DatePicker.Resources>
-                    <Style TargetType="DatePickerTextBox">
-                        <Setter Property="Control.Template">
-                            <Setter.Value>
-                                <ControlTemplate>
-                                    <TextBox x:Name="PART_TextBox"
-                                             Text="{Binding Path=SelectedDate, StringFormat = {}{0:yyyy}, RelativeSource={RelativeSource AncestorType={x:Type DatePicker}}}" />
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </DatePicker.Resources>
-            </DatePicker>-->
+                Height="100"
+                VerticalAlignment="Top"
+                Background="AliceBlue">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="{StaticResource RowItemSpaceMedium}" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="{StaticResource RowItemSpaceMedium}" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="{StaticResource RowItemSpaceMedium}" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="{StaticResource RowItemSpaceMedium}" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="1.2*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       Content="{x:Static properties:Resources.FilmName}" />
+                <TextBox Text="{Binding FilmEdit.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         Grid.Row="0"
+                         Foreground="Black"
+                         Grid.Column="1"
+                         Margin="0,0,5,0" />
+
+                <Label Grid.Row="2"
+                       Grid.Column="0"
+                       Content="{x:Static properties:Resources.FilmDirector}" />
+                <ComboBox ItemsSource="{Binding Directors}" 
+                          SelectedItem="{Binding FilmEdit.Director, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                          Foreground="Black"
+                          Grid.Row="2"
+                          Grid.Column="1"
+                          Margin="0,0,5,0" />
+
+                <Label Grid.Row="4"
+                       Grid.Column="0"
+                       Content="{x:Static properties:Resources.FilmReleaseDate}" />
+                <DatePicker SelectedDate="{Binding FilmEdit.ReleaseDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, StringFormat='dd/MM/yyyy'}"
+                            Foreground="Black"
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Margin="0,0,5,0"/>
+
+                <Label Grid.Row="6"
+                       Grid.Column="0"
+                       Content="{x:Static properties:Resources.FilmEvaluation}" />
+                <materialDesign:RatingBarButton Content="{Binding FilmeEdit.Evaluation, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            Foreground="Black"
+                            Grid.Row="6"
+                            Grid.Column="1"
+                            Margin="0,0,5,0" />
+
+                <Button x:Name="ValidButton"
+                        Grid.Row="8"
+                        Grid.Column="1"
+                        Command="{Binding ValidCommand}"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right"
+                        Height="25"
+                        Width="25"
+                        Margin="5"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                        Background="{x:Null}"
+                        BorderBrush="{x:Null}">
+                    <materialDesign:PackIcon Kind="Approval"
+                                             Foreground="Gray"
+                                             Width="25"
+                                             Height="25" />
+                </Button>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

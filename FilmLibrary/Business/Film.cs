@@ -11,21 +11,74 @@ namespace FilmLibrary.Business
         [DataMember]
         public Guid FilmId { get; set; }
 
+        private string _name;
         [DataMember]
         [Required(ErrorMessage = "Champ obligatoire")]
         [StringLength(250)]
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (value != _name)
+                {
+                    this._name = value;
+                    RaisePropertyChanged("Name");
+                    ValidateModelProperty(_name, "Name");
+                }
+            }
+        }
 
+        private DateTime? _releaseDate;
         [DataMember]
-        public int Year { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? ReleaseDate
+        {
+            get { return _releaseDate; }
+            set
+            {
+                if (value != _releaseDate)
+                {
+                    this._releaseDate = value;
+                    RaisePropertyChanged("ReleaseDate");
+                    ValidateModelProperty(_releaseDate, "ReleaseDate");
+                }
+            }
+        }
 
+        private int? _evaluation;
         [DataMember]
         [Range(0, 5, ErrorMessage = "La note doit être comprise entre 0 .. 5.")]
-        public int Evaluation { get; set; }
+        public int? Evaluation
+        {
+            get { return _evaluation; }
+            set
+            {
+                if (value != _evaluation)
+                {
+                    this._evaluation = value;
+                    RaisePropertyChanged("Evaluation");
+                    ValidateModelProperty(_evaluation, "Evaluation");
+                }
+            }
+        }
 
+        private Director _director;
         [JsonIgnore]
         [Required(ErrorMessage = "Champ obligatoire")]
-        public Director Director { get; set; }
+        public Director Director
+        {
+            get { return _director; }
+            set
+            {
+                if (value != _director)
+                {
+                    this._director = value;
+                    RaisePropertyChanged("Director");
+                    ValidateModelProperty(_director, "Director");
+                }
+            }
+        }
 
         [DataMember]
         public Guid DirectorId { get; set; }

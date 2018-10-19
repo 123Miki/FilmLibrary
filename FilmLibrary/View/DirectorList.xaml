@@ -76,7 +76,7 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding TextValue}">
-                            <GridViewColumnHeader Content="Réalisateur" />
+                            <GridViewColumnHeader Content="{x:Static properties:Resources.DirectorTitle}" />
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
@@ -104,54 +104,20 @@
                 <Label Grid.Row="0"
                        Grid.Column="0"
                        Content="{x:Static properties:Resources.DirectorName}" />
-                <TextBox Text="{Binding DirectorEdit.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, NotifyOnValidationError=True}"
+                <TextBox Text="{Binding DirectorEdit.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                          Grid.Row="0"
                          Foreground="Black"
                          Grid.Column="1"
-                         Margin="0,0,5,0">
-                    <Validation.ErrorTemplate>
-                        <ControlTemplate>
-                            <StackPanel>
-                                <!-- Placeholder for the TextBox itself -->
-                                <AdornedElementPlaceholder x:Name="textBox" />
-                                <ItemsControl ItemsSource="{Binding}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding ErrorContent}"
-                                                       Foreground="Red" />
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </ControlTemplate>
-                    </Validation.ErrorTemplate>
-                </TextBox>
+                         Margin="0,0,5,0" />
 
                 <Label Grid.Row="2"
                        Grid.Column="0"
                        Content="{x:Static properties:Resources.DirectorFirstname}" />
-                <TextBox Text="{Binding DirectorEdit.Firstname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, NotifyOnValidationError=True}"
+                <TextBox Text="{Binding DirectorEdit.Firstname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                          Foreground="Black"
                          Grid.Row="2"
                          Grid.Column="1"
-                         Margin="0,0,5,0">
-                    <Validation.ErrorTemplate>
-                        <ControlTemplate>
-                            <StackPanel>
-                                <!-- Placeholder for the TextBox itself -->
-                                <AdornedElementPlaceholder x:Name="textBox" />
-                                <ItemsControl ItemsSource="{Binding}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding ErrorContent}"
-                                                       Foreground="Red" />
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </ControlTemplate>
-                    </Validation.ErrorTemplate>
-                </TextBox>
+                         Margin="0,0,5,0" />
 
                 <Button x:Name="ValidButton"
                         Grid.Row="4"

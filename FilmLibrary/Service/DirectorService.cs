@@ -12,7 +12,7 @@ namespace FilmLibrary.Service
 
     public interface IDirectorService
     {
-        List<Director> GetDirectors();
+        IList<Director> GetDirectors();
         Director GetDirector(Guid id);
         bool SaveOrUpdateDirector(Director director);
     }
@@ -21,7 +21,7 @@ namespace FilmLibrary.Service
 
     public class DirectorService : IDirectorService
     {
-        private List<Director> _directors;
+        private IList<Director> _directors;
 
         #region Méthodes publics
 
@@ -37,7 +37,7 @@ namespace FilmLibrary.Service
         /// Méthode permettant d'obtenir la liste des réalisateurs
         /// </summary>
         /// <returns>Liste des réalisateurs</returns>
-        public List<Director> GetDirectors()
+        public IList<Director> GetDirectors()
         {
             if (_directors == null)
             {
@@ -56,6 +56,11 @@ namespace FilmLibrary.Service
             return _directors.FirstOrDefault(director => director.DirectorId == id);
         }
 
+        /// <summary>
+        /// Méthode qui lancer soit la savegarde, soit la modification d'un réalisateur
+        /// </summary>
+        /// <param name="director">Réalisateur sur lequel effectuer l'action</param>
+        /// <returns>Retourne un booléen qui indique si la sauvegarde s'est bien passée</returns>
         public bool SaveOrUpdateDirector(Director director)
         {
             if (GetDirector(director.DirectorId) != null)
@@ -145,7 +150,6 @@ namespace FilmLibrary.Service
         private void Init()
         {
             _directors = new List<Director>();
-            //_directors.Add(new Director() { })
             Load();
         }
 

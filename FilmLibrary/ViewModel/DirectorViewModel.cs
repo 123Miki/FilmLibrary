@@ -11,8 +11,8 @@ namespace FilmLibrary.ViewModel
 {
     public class DirectorViewModel : MvvmPropertyChanged
     {
-        private DirectorService _directorService;
         private ObservableCollection<Director> _directors;
+        private DirectorService _directorService;
         private Director _currentDirector;
         private Director _directorEdit;
         private FilmService _filmService;
@@ -130,7 +130,7 @@ namespace FilmLibrary.ViewModel
         {
             if (_directorService.SaveOrUpdateDirector(DirectorEdit))
             {
-                RaisePropertyChanged("Directors");
+                InitList();
             }
         }
 
@@ -143,10 +143,12 @@ namespace FilmLibrary.ViewModel
                     var directorToDelete = Directors.Where(x => x.DirectorId == DirectorEdit.DirectorId).FirstOrDefault();
                     if (directorToDelete != null)
                     {
-                        Directors.Remove(directorToDelete);
-                        _directorService.DeleteDirector(directorToDelete);
-                        directorToDelete.PropertyChanged -= Director_PropertyChanged;
-                        InitCurrentDirector();
+                        if (_directorService.DeleteDirector(directorToDelete))
+                        {
+                            InitList();
+                            directorToDelete.PropertyChanged -= Director_PropertyChanged;
+                            InitCurrentDirector();
+                        }
                     }
                 }
             }
@@ -200,7 +202,7 @@ namespace FilmLibrary.ViewModel
         {
             if (CurrentDirector != null)
             {
-                CurrentDirector = new Director() { DirectorId = CurrentDirector.DirectorId, Firstname = CurrentDirector.Firstname, Name = CurrentDirector.Name };
+                CurrentDirector = new Director();
                 CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
                 this.RaisePropertyChanged("CurrentDirector");
             }

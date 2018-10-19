@@ -38,6 +38,10 @@ namespace FilmLibrary.Service
         /// <returns>Liste des films</returns>
         public List<Film> GetFilms()
         {
+            if (_films == null)
+            {
+                return new List<Film>();
+            }
             return _films;
         }
 
@@ -49,6 +53,23 @@ namespace FilmLibrary.Service
         public Film GetFilm(Guid id)
         {
             return _films.FirstOrDefault(film => film.FilmId == id);
+        }
+
+        /// <summary>
+        /// Méthode qui lancer soit la savegarde, soit la modification d'un film
+        /// </summary>
+        /// <param name="film">Film sur lequel effectuer l'action</param>
+        /// <returns>Retourne un booléen qui indique si la sauvegarde s'est bien passée</returns>
+        public bool SaveOrUpdateFilm(Film film)
+        {
+            if (GetFilm(film.FilmId) != null)
+            {
+                return UpdateFilm(film);
+            }
+            else
+            {
+                return SaveFilm(film);
+            }
         }
 
         /// <summary>
@@ -83,7 +104,12 @@ namespace FilmLibrary.Service
             try
             {
                 var filmToUpdate = GetFilm(film.FilmId);
-                filmToUpdate = film;
+                filmToUpdate.FilmId = film.FilmId;
+                filmToUpdate.Name = film.Name;
+                filmToUpdate.Director = film.Director;
+                filmToUpdate.DirectorId = film.DirectorId;
+                filmToUpdate.Evaluation = film.Evaluation;
+                filmToUpdate.ReleaseDate = film.ReleaseDate;
                 Save();
                 updated = true;
             }

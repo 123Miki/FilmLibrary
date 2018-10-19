@@ -88,11 +88,83 @@ namespace FilmLibrary.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to REALISATEUR.
+        ///   Looks up a localized string similar to Réalisateur.
         /// </summary>
         public static string DirectorTitle {
             get {
                 return ResourceManager.GetString("DirectorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Réalisateur :.
+        /// </summary>
+        public static string FilmDirector {
+            get {
+                return ResourceManager.GetString("FilmDirector", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Réalisateur.
+        /// </summary>
+        public static string FilmDirectorTitle {
+            get {
+                return ResourceManager.GetString("FilmDirectorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note :.
+        /// </summary>
+        public static string FilmEvaluation {
+            get {
+                return ResourceManager.GetString("FilmEvaluation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note.
+        /// </summary>
+        public static string FilmEvaluationTitle {
+            get {
+                return ResourceManager.GetString("FilmEvaluationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nom :.
+        /// </summary>
+        public static string FilmName {
+            get {
+                return ResourceManager.GetString("FilmName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nom.
+        /// </summary>
+        public static string FilmNameTilte {
+            get {
+                return ResourceManager.GetString("FilmNameTilte", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date de sortie :.
+        /// </summary>
+        public static string FilmReleaseDate {
+            get {
+                return ResourceManager.GetString("FilmReleaseDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date de sortie.
+        /// </summary>
+        public static string FilmReleaseDateTitle {
+            get {
+                return ResourceManager.GetString("FilmReleaseDateTitle", resourceCulture);
             }
         }
         

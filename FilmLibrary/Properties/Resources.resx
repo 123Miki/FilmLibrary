@@ -127,7 +127,31 @@
     <value>Nom :</value>
   </data>
   <data name="DirectorTitle" xml:space="preserve">
-    <value>REALISATEUR</value>
+    <value>Réalisateur</value>
+  </data>
+  <data name="FilmDirector" xml:space="preserve">
+    <value>Réalisateur :</value>
+  </data>
+  <data name="FilmDirectorTitle" xml:space="preserve">
+    <value>Réalisateur</value>
+  </data>
+  <data name="FilmEvaluation" xml:space="preserve">
+    <value>Note :</value>
+  </data>
+  <data name="FilmEvaluationTitle" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="FilmName" xml:space="preserve">
+    <value>Nom :</value>
+  </data>
+  <data name="FilmNameTilte" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="FilmReleaseDate" xml:space="preserve">
+    <value>Date de sortie :</value>
+  </data>
+  <data name="FilmReleaseDateTitle" xml:space="preserve">
+    <value>Date de sortie</value>
   </data>
   <data name="FilmTitle" xml:space="preserve">
     <value>FILM</value>

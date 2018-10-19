@@ -132,6 +132,9 @@
   <data name="DirectorTitle" xml:space="preserve">
     <value>Réalisateur</value>
   </data>
+  <data name="EditionTitle" xml:space="preserve">
+    <value>EDITION</value>
+  </data>
   <data name="FilmDirector" xml:space="preserve">
     <value>Réalisateur :</value>
   </data>

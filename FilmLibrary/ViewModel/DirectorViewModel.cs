@@ -188,7 +188,7 @@ namespace FilmLibrary.ViewModel
 
         private void InitList()
         {
-            Directors = new ObservableCollection<Director>(_directorService.GetDirectors());
+            Directors = new ObservableCollection<Director>(_directorService.GetDirectors().OrderBy(s => s.TextValue));
             if (Directors != null)
             {
                 foreach (Director director in Directors)

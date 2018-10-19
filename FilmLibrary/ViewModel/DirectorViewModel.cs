@@ -79,9 +79,9 @@ namespace FilmLibrary.ViewModel
 
         public DirectorViewModel()
         {
-            _directorService = new DirectorService();
             _filmService = new FilmService();
-            InitList();
+            _directorService = new DirectorService();
+            InitListDirector();
             CanDeleteDirector = false;
             InitCurrentDirector();
             InitDirectorEdit();
@@ -89,20 +89,11 @@ namespace FilmLibrary.ViewModel
             CreateCommands();
         }
 
-        private void InitCurrentDirector()
-        {
-            CurrentDirector = new Director();
-            CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
-        }
+        #endregion
 
-        private void CreateCommands()
-        {
-            ValidCommand = new SimpleCommand(() => ValidDirector(), CanValid);
-            AddDirectorCommand = new SimpleCommand(() => InitDirectorEdit());
-            DeleteDirectorCommand = new SimpleCommand(() => DeleteDirector());
-        }
+        #region Méthodes privées
 
-        public void CheckCanDeleteDirector()
+        private void CheckCanDeleteDirector()
         {
             if (CurrentDirector != null && CurrentDirector.DirectorId != null)
             {
@@ -122,15 +113,24 @@ namespace FilmLibrary.ViewModel
             }
         }
 
-        #endregion
+        private void CreateCommands()
+        {
+            ValidCommand = new SimpleCommand(() => ValidDirector(), CanValid);
+            AddDirectorCommand = new SimpleCommand(() => InitDirectorEdit());
+            DeleteDirectorCommand = new SimpleCommand(() => DeleteDirector());
+        }
 
-        #region Méthodes privées
+        private void InitCurrentDirector()
+        {
+            CurrentDirector = new Director();
+            CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
+        }
 
         private void ValidDirector()
         {
             if (_directorService.SaveOrUpdateDirector(DirectorEdit))
             {
-                InitList();
+                InitListDirector();
             }
         }
 
@@ -145,7 +145,7 @@ namespace FilmLibrary.ViewModel
                     {
                         if (_directorService.DeleteDirector(directorToDelete))
                         {
-                            InitList();
+                            InitListDirector();
                             directorToDelete.PropertyChanged -= Director_PropertyChanged;
                             InitCurrentDirector();
                         }
@@ -184,9 +184,10 @@ namespace FilmLibrary.ViewModel
         private void Director_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             ValidCommand.RaiseCanExecuteChanged();
+            CheckCanDeleteDirector();
         }
 
-        private void InitList()
+        private void InitListDirector()
         {
             Directors = new ObservableCollection<Director>(_directorService.GetDirectors().OrderBy(s => s.TextValue));
             if (Directors != null)
@@ -195,16 +196,6 @@ namespace FilmLibrary.ViewModel
                 {
                     director.RegisterPropertyChanged(Director_PropertyChanged);
                 }
-            }
-        }
-
-        public void InitCurrentItem()
-        {
-            if (CurrentDirector != null)
-            {
-                CurrentDirector = new Director();
-                CurrentDirector.RegisterPropertyChanged(Director_PropertyChanged);
-                this.RaisePropertyChanged("CurrentDirector");
             }
         }
 

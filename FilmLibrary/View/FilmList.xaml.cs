@@ -28,16 +28,5 @@ namespace FilmLibrary.View
             InitializeComponent();
             DataContext = ViewModel;
         }
-
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ViewModel.CheckCanDeleteFilm();
-
-        }
-
-        private void ButtonDelete_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.DeleteFilm();
-        }
     }
 }

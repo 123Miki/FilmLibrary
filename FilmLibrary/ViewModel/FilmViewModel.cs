@@ -1,14 +1,23 @@
 ﻿using FilmLibrary.Business;
+using FilmLibrary.Core;
+using FilmLibrary.Core.Helpers;
 using FilmLibrary.Service;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+
 
 namespace FilmLibrary.ViewModel
 {
     public class FilmViewModel : MvvmPropertyChanged
     {
         private ObservableCollection<Film> _films;
+        private ObservableCollection<Director> _directors;
+        private Film _currentFilm;
+        private Film _filmEdit;
         private FilmService _filmService;
+        private DirectorService _directorService;
         private bool _canDeleteFilm;
 
         public ObservableCollection<Film> Films
@@ -23,7 +32,46 @@ namespace FilmLibrary.ViewModel
                 }
             }
         }
-        public Film CurrentFilm { get; set; }
+        public ObservableCollection<Director> Directors
+        {
+            get
+            {
+                return _directors;
+            }
+            set
+            {
+                if (value != _directors)
+
+                {
+                    this._directors = value;
+                    RaisePropertyChanged("Directors");
+                }
+            }
+        }
+        public Film CurrentFilm
+        {
+            get { return _currentFilm; }
+            set
+            {
+                if (value != _currentFilm)
+                {
+                    this._currentFilm = value;
+                    RaisePropertyChanged("CurrentFilm");
+                }
+            }
+        }
+        public Film FilmEdit
+        {
+            get { return _filmEdit; }
+            set
+            {
+                if (value != _filmEdit)
+                {
+                    this._filmEdit = value;
+                    RaisePropertyChanged("FilmEdit");
+                }
+            }
+        }
         public bool CanDeleteFilm
         {
             get { return _canDeleteFilm; }
@@ -32,49 +80,160 @@ namespace FilmLibrary.ViewModel
                 if (value != _canDeleteFilm)
                 {
                     this._canDeleteFilm = value;
-                    RaisePropertyChanged();
+                    RaisePropertyChanged("CanDeleteFilm");
                 }
             }
         }
 
+        public SimpleCommand ValidCommand { get; set; }
+        public SimpleCommand AddFilmCommand { get; set; }
+        public SimpleCommand DeleteFilmCommand { get; set; }
+
+        #region Méthodes publics
+
         public FilmViewModel()
         {
             _filmService = new FilmService();
-            InitList();
+            _directorService = new DirectorService();
+            InitListFilm();
+            InitListDirector();
             CanDeleteFilm = false;
-            CurrentFilm = new Film();
-            CurrentFilm.RegisterPropertyChanged(Film_PropertyChanged);
+            InitCurrentFilm();
+            InitFilmEdit();
+            this.RegisterPropertyChanged(FilmViewModel_PropertyChanged);
+            CreateCommands();
         }
 
-        private void Film_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            CheckCanDeleteFilm();
-        }
+        #endregion
 
-        public void DeleteFilm()
+        #region Méthodes privées
+
+        private void CheckCanDeleteFilm()
         {
-            if (CanDeleteFilm)
+            if (CurrentFilm != null && CurrentFilm.FilmId != null)
             {
-                _filmService.DeleteFilm(CurrentFilm);
-                InitList();
-            }
-        }
-
-        private void InitList()
-        {
-            Films = new ObservableCollection<Film>(_filmService.GetFilms());
-        }
-
-        public void CheckCanDeleteFilm()
-        {
-            if(CurrentFilm != null && CurrentFilm.FilmId != null)
-            {
-                CanDeleteFilm = true;
+                var isFilmExist = _filmService.GetFilms().Any(x => x.FilmId == CurrentFilm.FilmId);
+                if (isFilmExist)
+                {
+                    CanDeleteFilm = true;
+                }
+                else
+                {
+                    CanDeleteFilm = false;
+                }
             }
             else
             {
                 CanDeleteFilm = false;
             }
         }
+
+        private void CreateCommands()
+        {
+            ValidCommand = new SimpleCommand(() => ValidFilm(), CanValid);
+            AddFilmCommand = new SimpleCommand(() => InitFilmEdit());
+            DeleteFilmCommand = new SimpleCommand(() => DeleteFilm());
+        }
+
+        private void InitCurrentFilm()
+        {
+            CurrentFilm = new Film();
+            CurrentFilm.RegisterPropertyChanged(Film_PropertyChanged);
+        }
+
+        private void ValidFilm()
+        {
+            if (_filmService.SaveOrUpdateFilm(FilmEdit))
+            {
+                InitListFilm();
+            }
+        }
+
+        private void DeleteFilm()
+        {
+            if (CanDeleteFilm)
+            {
+                if (ConfirmationHelper.ConfirmationYesNo("Voulez-vous vraiment supprimer ce élément ?", "Confirmation"))
+                {
+                    var filmToDelete = Films.Where(x => x.FilmId == FilmEdit.DirectorId).FirstOrDefault();
+                    if (filmToDelete != null)
+                    {
+                        if (_filmService.DeleteFilm(filmToDelete))
+                        {
+                            InitListFilm();
+                            filmToDelete.PropertyChanged -= Film_PropertyChanged;
+                            InitCurrentFilm();
+                        }
+                    }
+                }
+            }
+        }
+
+        private void InitFilmEdit()
+        {
+            FilmEdit = new Film();
+            FilmEdit.RegisterPropertyChanged(Film_PropertyChanged);
+            FilmEdit.FilmId = Guid.NewGuid();
+        }
+
+        private bool CanValid()
+        {
+            return FilmEdit != null
+                && ValidateHelper.ValidateObject(FilmEdit);
+        }
+
+        private void FilmViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == this.GetPropertyName(() => CurrentFilm))
+            {
+                if (CurrentFilm != null)
+                {
+                    FilmEdit.FilmId = CurrentFilm.FilmId;
+                    FilmEdit.Name = CurrentFilm.Name;
+                    FilmEdit.Director = new Director()
+                    {
+                        DirectorId = CurrentFilm.Director.DirectorId,
+                        Name = CurrentFilm.Director.Name,
+                        Firstname = CurrentFilm.Director.Firstname
+                    };
+                    //FilmEdit.DirectorId = CurrentFilm.Director.DirectorId;
+                    FilmEdit.ReleaseDate = CurrentFilm.ReleaseDate;
+                    FilmEdit.Evaluation = CurrentFilm.Evaluation;
+                }
+            }
+            CheckCanDeleteFilm();
+        }
+
+        private void Film_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            ValidCommand.RaiseCanExecuteChanged();
+            CheckCanDeleteFilm();
+        }
+
+        private void InitListFilm()
+        {
+            Films = new ObservableCollection<Film>(_filmService.GetFilms());
+            if (Films != null)
+            {
+                foreach (Film film in Films)
+                {
+                    film.RegisterPropertyChanged(Film_PropertyChanged);
+                }
+            }
+        }
+
+        private void InitListDirector()
+        {
+            Directors = new ObservableCollection<Director>(_directorService.GetDirectors());
+            if (Films != null)
+            {
+                foreach (Film film in Films)
+                {
+                    film.RegisterPropertyChanged(Film_PropertyChanged);
+                }
+            }
+        }
+
+        #endregion
     }
 }

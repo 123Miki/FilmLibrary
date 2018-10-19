@@ -82,6 +82,7 @@ namespace FilmLibrary.Service
             bool saved = false;
             try
             {
+                film.DirectorId = film.Director.DirectorId;
                 _films.Add(film);
                 Save();
                 saved = true;

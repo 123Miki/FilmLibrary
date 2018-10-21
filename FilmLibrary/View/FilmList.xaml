@@ -69,17 +69,17 @@
                       VerticalAlignment="Top"
                       MaxHeight="520"
                       MaxWidth="650"
-                      Width="650"
+                      Width="650"                      
                       ScrollViewer.CanContentScroll="True">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="{x:Static properties:Resources.FilmNameTilte}"
                                         DisplayMemberBinding="{Binding Name}"
-                                        Width="Auto">
+                                        Width="170">
                         </GridViewColumn>
                         <GridViewColumn Header="{x:Static properties:Resources.FilmDirectorTitle}"
                                         DisplayMemberBinding="{Binding Director.TextValue}"
-                                        Width="Auto">
+                                        Width="180">
                         </GridViewColumn>
                         <GridViewColumn Header="{x:Static properties:Resources.FilmReleaseDateTitle}"
                                         DisplayMemberBinding="{Binding ReleaseDate, StringFormat='dd/MM/yyyy'}"

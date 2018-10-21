@@ -159,6 +159,7 @@ namespace FilmLibrary.ViewModel
             if (_filmService.SaveOrUpdateFilm(FilmEdit))
             {
                 InitListFilm();
+                InitFilmEdit();
             }
         }
 
@@ -176,6 +177,7 @@ namespace FilmLibrary.ViewModel
                             InitListFilm();
                             filmToDelete.PropertyChanged -= Film_PropertyChanged;
                             InitCurrentFilm();
+                            InitFilmEdit();
                         }
                     }
                 }
@@ -205,7 +207,7 @@ namespace FilmLibrary.ViewModel
         {
             if (e.PropertyName == this.GetPropertyName(() => CurrentFilm))
             {
-                if (CurrentFilm != null)
+                if (CurrentFilm != null && CurrentFilm.FilmId != Guid.Empty)
                 {
                     FilmEdit = new Film();
                     FilmEdit.FilmId = CurrentFilm.FilmId;
@@ -253,7 +255,7 @@ namespace FilmLibrary.ViewModel
 
         private void InitListDirector()
         {
-            Directors = new ObservableCollection<Director>(_directorService.GetDirectors());
+            Directors = new ObservableCollection<Director>(_directorService.GetDirectors().OrderBy(x => x.TextValue));
             if (Films != null)
             {
                 foreach (Film film in Films)

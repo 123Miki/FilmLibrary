@@ -131,6 +131,7 @@ namespace FilmLibrary.ViewModel
             if (_directorService.SaveOrUpdateDirector(DirectorEdit))
             {
                 InitListDirector();
+                InitDirectorEdit();
             }
         }
 

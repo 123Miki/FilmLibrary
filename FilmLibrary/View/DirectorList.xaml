@@ -74,7 +74,8 @@
                       ScrollViewer.CanContentScroll="True">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding TextValue}">
+                        <GridViewColumn DisplayMemberBinding="{Binding TextValue}"
+                                        Width="600">
                             <GridViewColumnHeader Content="{x:Static properties:Resources.DirectorTitle}" />
                         </GridViewColumn>
                     </GridView>

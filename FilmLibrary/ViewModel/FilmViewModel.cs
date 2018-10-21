@@ -187,6 +187,12 @@ namespace FilmLibrary.ViewModel
             FilmEdit = new Film();
             FilmEdit.RegisterPropertyChanged(Film_PropertyChanged);
             FilmEdit.FilmId = Guid.NewGuid();
+            ResetDirectorEdit();
+        }
+
+        private void ResetDirectorEdit()
+        {
+            DirectorEdit = null;
         }
 
         private bool CanValid()
@@ -205,6 +211,7 @@ namespace FilmLibrary.ViewModel
                     FilmEdit.FilmId = CurrentFilm.FilmId;
                     FilmEdit.Name = CurrentFilm.Name;
                     DirectorEdit = Directors.Where(x => x.DirectorId == CurrentFilm.DirectorId).First();
+                    RaisePropertyChanged("DirectorEdit");
                     FilmEdit.ReleaseDate = CurrentFilm.ReleaseDate;
                     FilmEdit.Evaluation = CurrentFilm.Evaluation;
                     FilmEdit.RegisterPropertyChanged(Film_PropertyChanged);

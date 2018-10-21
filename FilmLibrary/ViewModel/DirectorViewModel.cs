@@ -173,9 +173,11 @@ namespace FilmLibrary.ViewModel
             {
                 if (CurrentDirector != null)
                 {
+                    DirectorEdit = new Director();
                     DirectorEdit.DirectorId = CurrentDirector.DirectorId;
                     DirectorEdit.Name = CurrentDirector.Name;
                     DirectorEdit.Firstname = CurrentDirector.Firstname;
+                    DirectorEdit.RegisterPropertyChanged(Director_PropertyChanged);
                 }
             }
             CheckCanDeleteDirector();

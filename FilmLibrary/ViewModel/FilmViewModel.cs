@@ -16,6 +16,7 @@ namespace FilmLibrary.ViewModel
         private ObservableCollection<Director> _directors;
         private Film _currentFilm;
         private Film _filmEdit;
+        private Director _directorEdit;
         private FilmService _filmService;
         private DirectorService _directorService;
         private bool _canDeleteFilm;
@@ -69,6 +70,18 @@ namespace FilmLibrary.ViewModel
                 {
                     this._filmEdit = value;
                     RaisePropertyChanged("FilmEdit");
+                }
+            }
+        }
+        public Director DirectorEdit
+        {
+            get { return _directorEdit; }
+            set
+            {
+                if (value != _directorEdit)
+                {
+                    this._directorEdit = value;
+                    RaisePropertyChanged("DirectorEdit");
                 }
             }
         }
@@ -155,7 +168,7 @@ namespace FilmLibrary.ViewModel
             {
                 if (ConfirmationHelper.ConfirmationYesNo("Voulez-vous vraiment supprimer ce élément ?", "Confirmation"))
                 {
-                    var filmToDelete = Films.Where(x => x.FilmId == FilmEdit.DirectorId).FirstOrDefault();
+                    var filmToDelete = Films.Where(x => x.FilmId == FilmEdit.FilmId).FirstOrDefault();
                     if (filmToDelete != null)
                     {
                         if (_filmService.DeleteFilm(filmToDelete))
@@ -188,20 +201,29 @@ namespace FilmLibrary.ViewModel
             {
                 if (CurrentFilm != null)
                 {
+                    FilmEdit = new Film();
                     FilmEdit.FilmId = CurrentFilm.FilmId;
                     FilmEdit.Name = CurrentFilm.Name;
-                    FilmEdit.Director = new Director()
-                    {
-                        DirectorId = CurrentFilm.Director.DirectorId,
-                        Name = CurrentFilm.Director.Name,
-                        Firstname = CurrentFilm.Director.Firstname
-                    };
-                    //FilmEdit.DirectorId = CurrentFilm.Director.DirectorId;
+                    DirectorEdit = Directors.Where(x => x.DirectorId == CurrentFilm.DirectorId).First();
                     FilmEdit.ReleaseDate = CurrentFilm.ReleaseDate;
                     FilmEdit.Evaluation = CurrentFilm.Evaluation;
+                    FilmEdit.RegisterPropertyChanged(Film_PropertyChanged);
                 }
             }
-            CheckCanDeleteFilm();
+            else if (e.PropertyName == this.GetPropertyName(() => DirectorEdit))
+            {
+                if(DirectorEdit != null)
+                {
+                    FilmEdit.Director = new Director()
+                    {
+                        DirectorId = DirectorEdit.DirectorId,
+                        Name = DirectorEdit.Name,
+                        Firstname = DirectorEdit.Firstname
+                    };
+                    FilmEdit.DirectorId = DirectorEdit.DirectorId;
+                }
+            }
+                CheckCanDeleteFilm();
         }
 
         private void Film_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -212,7 +234,7 @@ namespace FilmLibrary.ViewModel
 
         private void InitListFilm()
         {
-            Films = new ObservableCollection<Film>(_filmService.GetFilms());
+            Films = new ObservableCollection<Film>(_filmService.GetFilms().OrderBy(s => s.Name));
             if (Films != null)
             {
                 foreach (Film film in Films)

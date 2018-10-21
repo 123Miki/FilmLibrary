@@ -73,21 +73,28 @@
                       ScrollViewer.CanContentScroll="True">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Name}"
+                        <GridViewColumn Header="{x:Static properties:Resources.FilmNameTilte}"
+                                        DisplayMemberBinding="{Binding Name}"
                                         Width="Auto">
-                            <GridViewColumnHeader Content="{x:Static properties:Resources.FilmNameTilte}" />
                         </GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Director.TextValue}"
+                        <GridViewColumn Header="{x:Static properties:Resources.FilmDirectorTitle}"
+                                        DisplayMemberBinding="{Binding Director.TextValue}"
                                         Width="Auto">
-                            <GridViewColumnHeader Content="{x:Static properties:Resources.FilmDirectorTitle}" />
                         </GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding ReleaseDate, StringFormat='dd/MM/yyyy'}"
+                        <GridViewColumn Header="{x:Static properties:Resources.FilmReleaseDateTitle}"
+                                        DisplayMemberBinding="{Binding ReleaseDate, StringFormat='dd/MM/yyyy'}"
                                         Width="Auto">
-                            <GridViewColumnHeader Content="{x:Static properties:Resources.FilmReleaseDateTitle}" />
                         </GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Evaluation}"
+                        <GridViewColumn Header="{x:Static properties:Resources.FilmEvaluationTitle}"
                                         Width="Auto">
-                            <GridViewColumnHeader Content="{x:Static properties:Resources.FilmEvaluationTitle}" />
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <materialDesign:RatingBar Value="{Binding Evaluation}"
+                                                              Width="125"
+                                                              IsEnabled="False"
+                                                              Margin="3"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
@@ -139,7 +146,7 @@
                        Grid.Column="0"
                        Content="{x:Static properties:Resources.FilmDirector}" />
                 <ComboBox ItemsSource="{Binding Directors}" 
-                          SelectedItem="{Binding FilmEdit.Director, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                          SelectedItem="{Binding DirectorEdit, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                           Foreground="Black"
                           Grid.Row="4"
                           Grid.Column="1"

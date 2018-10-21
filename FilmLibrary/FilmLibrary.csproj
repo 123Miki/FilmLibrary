@@ -73,7 +73,6 @@
     </ApplicationDefinition>
     <Compile Include="Business\Director.cs" />
     <Compile Include="Business\Film.cs" />
-    <Compile Include="Business\MvvmErrorChanged.cs" />
     <Compile Include="Core\Consts.cs" />
     <Compile Include="Core\Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Core\Helpers\ConfirmationHelper.cs" />

@@ -24,7 +24,6 @@ namespace FilmLibrary.Business
                 {
                     this._name = value;
                     RaisePropertyChanged("Name");
-                    ValidateModelProperty(_name, "Name");
                 }
             }
         }
@@ -41,14 +40,12 @@ namespace FilmLibrary.Business
                 {
                     this._releaseDate = value;
                     RaisePropertyChanged("ReleaseDate");
-                    ValidateModelProperty(_releaseDate, "ReleaseDate");
                 }
             }
         }
 
         private int? _evaluation;
         [DataMember]
-        [Range(0, 5, ErrorMessage = "La note doit être comprise entre 0 .. 5.")]
         public int? Evaluation
         {
             get { return _evaluation; }
@@ -58,7 +55,6 @@ namespace FilmLibrary.Business
                 {
                     this._evaluation = value;
                     RaisePropertyChanged("Evaluation");
-                    ValidateModelProperty(_evaluation, "Evaluation");
                 }
             }
         }
@@ -75,7 +71,6 @@ namespace FilmLibrary.Business
                 {
                     this._director = value;
                     RaisePropertyChanged("Director");
-                    ValidateModelProperty(_director, "Director");
                 }
             }
         }
